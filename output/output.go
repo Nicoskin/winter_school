@@ -2,15 +2,27 @@ package output
 
 import (
 	"fmt"
+	"sort"
 	"ws/graph"
 	"ws/unionfind"
 )
 
 func PrintGraph(g *graph.Graph) {
 	adj := g.GetAdj()
+
+	// Сохраняем ключи в срез
+	keys := make([]int, 0, len(adj))
+	for key := range adj {
+		keys = append(keys, key)
+	}
+
+	// Сортируем ключи
+	sort.Ints(keys)
+
 	fmt.Println("===================")
-	for key, values := range adj {
-		fmt.Printf("%d: [", key)
+	for _, key := range keys {
+		values := adj[key]
+		fmt.Printf("%2d: [", key)
 		for i, value := range values {
 			if i > 0 {
 				fmt.Print(", ")
@@ -49,4 +61,13 @@ func PrintDisjointSet(ds *unionfind.DisjointSet) {
 		last_parent = ds.Find(i)
 	}
 	fmt.Println("\n===================")
+}
+
+func PrintEdges(edges []graph.Edge) {
+	fmt.Println("===================")
+	for _, edge := range edges {
+		u, v := edge.GetUV()
+		fmt.Printf("%-2d- %-2d: %d\n", u, v, edge.GetWeight())
+	}
+	fmt.Println("===================")
 }

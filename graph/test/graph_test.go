@@ -31,3 +31,21 @@ func TestMain1(t *testing.T) {
 
 	fmt.Println(graph.ConnectedComponents(g))
 }
+
+func TestMain2(t *testing.T) {
+	g := graph.NewGraph()
+	g.AddEdge(0, 1, true, 12)
+	g.AddEdge(1, 2, true)
+	g.AddEdge(2, 3, true)
+	g.AddEdge(0, 3, true)
+
+	g.AddEdge(4, 5, true)
+	g.AddEdge(5, 6, true)
+	g.AddEdge(4, 6, true)
+
+	g.AddEdge(7, 8, true, 10)
+	g.AddEdge(8, 9, true)
+	g.AddEdge(7, 9, true, 13)
+
+	fmt.Println(g.GetAllEdges())
+}

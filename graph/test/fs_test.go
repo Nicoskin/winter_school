@@ -7,7 +7,7 @@ import (
 )
 
 // go test -v graph.go fs_test.go fs.go
-func TestMain2(t *testing.T) {
+func TestMain0(t *testing.T) {
 	gr := graph.NewGraph()
 	gr.AddEdge(1, 2, true)
 	gr.AddEdge(1, 3, true)
