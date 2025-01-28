@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"ws/stack_queue"
+	"ws/graph/stack_queue"
 )
 
 func BFS(g *Graph, start int) []int {

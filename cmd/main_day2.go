@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"ws/algorithms"
+	"ws/algorithms/unionfind"
 	"ws/graph"
 	"ws/mst"
 	"ws/output"
-	"ws/unionfind"
 )
 
 func main() {

@@ -2,8 +2,8 @@ package mst
 
 import (
 	"ws/algorithms"
+	"ws/algorithms/unionfind"
 	"ws/graph"
-	"ws/unionfind"
 )
 
 func MST(n int, edges []graph.Edge) (mst []graph.Edge, totalWeight int) {

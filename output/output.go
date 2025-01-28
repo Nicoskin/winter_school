@@ -3,8 +3,8 @@ package output
 import (
 	"fmt"
 	"sort"
+	"ws/algorithms/unionfind"
 	"ws/graph"
-	"ws/unionfind"
 )
 
 func PrintGraph(g *graph.Graph) {
