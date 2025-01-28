@@ -16,11 +16,15 @@ func (g *Graph) AddEdge(u, v int, undirected bool, weight ...int) {
 		w = weight[0]
 	}
 
+	// Добавляем ребро u->v
+	g.edges = append(g.edges, Edge{u, v, w})
 	g.adj[u] = append(g.adj[u], v)
+
+	// Если граф ненаправленный, добавляем также ребро v->u
 	if undirected {
+		g.edges = append(g.edges, Edge{v, u, w})
 		g.adj[v] = append(g.adj[v], u)
 	}
-	g.edges = append(g.edges, Edge{u, v, w})
 }
 
 func HasEdge(g *Graph, u, v int) bool {
@@ -56,14 +60,7 @@ func ConnectedComponents(g *Graph) (count int, comp map[int]int) {
 }
 
 func (g *Graph) GetAllEdges() []Edge {
-	var edges []Edge
-	for _, edge := range g.edges {
-		if edge.u > edge.v {
-			edge.u, edge.v = edge.v, edge.u
-		}
-		edges = append(edges, edge)
-	}
-	return edges
+	return g.edges // Возвращаем все рёбра без изменения
 }
 
 func (e *Edge) GetWeight() int {
@@ -76,4 +73,23 @@ func (e *Edge) GetUV() (int, int) {
 
 func (g *Graph) SetAdj(adj map[int][]int) {
 	g.adj = adj
+}
+
+func (g *Graph) GetNeighbors(u int) []struct{ V, W int } {
+	neighbors := []struct{ V, W int }{}
+
+	// Проверка существования вершины и получение всех соседей
+	if edges, ok := g.adj[u]; ok {
+		for _, v := range edges {
+			// Находим вес ребра между u и v
+			for _, edge := range g.edges {
+				if edge.u == u && edge.v == v {
+					neighbors = append(neighbors, struct{ V, W int }{V: edge.v, W: edge.w})
+					break
+				}
+			}
+		}
+	}
+
+	return neighbors
 }
