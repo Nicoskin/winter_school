@@ -7,9 +7,19 @@ func Mergesort(edges []graph.Edge) []graph.Edge {
 		return edges
 	}
 
+	left_chan := make(chan []graph.Edge)
+	right_chan := make(chan []graph.Edge)
+
 	mid := len(edges) / 2
-	left := Mergesort(edges[:mid])  // Рекурсивно сортируем левую часть
-	right := Mergesort(edges[mid:]) // Рекурсивно сортируем правую часть
+	go func() {
+		left_chan <- Mergesort(edges[:mid])
+	}()
+	go func() {
+		right_chan <- Mergesort(edges[mid:])
+	}()
+
+	left := <-left_chan
+	right := <-right_chan
 
 	return merge(left, right) // Объединяем отсортированные части
 }
@@ -43,3 +53,15 @@ func merge(left, right []graph.Edge) []graph.Edge {
 
 	return result
 }
+
+// func Mergesort(edges []graph.Edge) []graph.Edge {
+// 	if len(edges) <= 1 {
+// 		return edges
+// 	}
+
+// 	mid := len(edges) / 2
+// 	left := Mergesort(edges[:mid])  // Рекурсивно сортируем левую часть
+// 	right := Mergesort(edges[mid:]) // Рекурсивно сортируем правую часть
+
+// 	return merge(left, right) // Объединяем отсортированные части
+// }
