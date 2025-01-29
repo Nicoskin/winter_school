@@ -7,42 +7,36 @@ import (
 	"ws/distributed"
 )
 
-func TestMain(t *testing.T) {
+func TestMain2(t *testing.T) {
 
 	// Создаем диспетчер
 	d := distributed.NewDispatcher()
 
 	// Создаем узлы
 	nodes := []*distributed.Node{
-		{ID: 1, Inbox: make(chan distributed.Message, 10)},
-		{ID: 2, Inbox: make(chan distributed.Message, 10)},
-		{ID: 3, Inbox: make(chan distributed.Message, 10)},
+		{ID: 1, NextID: 2, Inbox: make(chan distributed.Message, 10)},
+		{ID: 2, NextID: 3, Inbox: make(chan distributed.Message, 10)},
+		{ID: 3, NextID: 1, Inbox: make(chan distributed.Message, 10)},
 	}
 
 	// Регистрация и запуск
-	id_for_leader := -1
+	id_for_leader := 3
 	for _, node := range nodes {
 		d.RegisterNode(node.ID, node.Inbox)
 		node.SetLeaderID(id_for_leader)
-		go node.Bully(d)
+		node.SetLocalCount()
+		go node.GlobalCollection(d)
 	}
-
-	// fmt.Println(nodes[0])
-	// fmt.Println(d)
-
-	// d.Send(1, 2, "Hello 1->2")
-	// d.Send(2, 3, "Hello 2->3")
-	// d.Send(3, 1, "Hello 3->1")
 
 	time.Sleep(1 * time.Second)
 
-	nodes[0].StartBully(d)
+	nodes[2].StartGlobalCollection(d)
 
 	// Завершение
 	time.Sleep(2 * time.Second)
 	fmt.Println("\nИтоговый результат:")
 	for _, node := range nodes {
-		fmt.Println("Node", node.ID, "leader is", node.GetLeaderID())
+		fmt.Println("Node", node.ID, "localCount", node.GetLocalCount())
 		close(node.Inbox)
 	}
 }
