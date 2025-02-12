@@ -15,15 +15,15 @@ Coder::Coder(int k) :k_(k) {
 std::vector<int> Coder::encode(const std::vector<int>& data) {
     if (data.size() != k_) {
         std::cerr << "Ошибка: Размер входных данных не соответствует k." << std::endl;
-        return {}; // Возвращаем пустой вектор в случае ошибки.
+        return {};
     }
 
-    std::vector<int> codeWord(n_, 0); // Инициализируем кодовое слово нулями.
+    std::vector<int> codeWord(n_, 0);
 
     // Матричное умножение: codeWord = data * G
     for (int i = 0; i < n_; ++i) {
         for (int j = 0; j < k_; ++j) {
-            codeWord[i] ^= data[j] & G[i][j];  // Умножение по модулю 2
+            codeWord[i] ^= data[j] & G[i][j];
         }
     }
 

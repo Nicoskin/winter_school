@@ -15,7 +15,7 @@ Orchestrator::Orchestrator(int k, int numSimulations, double startSigma, double 
     sigmaStep_(sigmaStep) {}
 
 void Orchestrator::runSimulations() {
-    std::ofstream outputFile("results.txt"); // Файл для сохранения результатов
+    std::ofstream outputFile("results.txt"); 
 
     if (!outputFile.is_open()) {
         std::cerr << "Ошибка: не удалось открыть файл для записи результатов!" << std::endl;
@@ -35,16 +35,16 @@ void Orchestrator::runSimulations() {
             std::vector<int> data = Utils::generateRandomData(k);
             std::vector<int> codeWord = coder.encode(data);
             std::vector<double> noisyCodeWord = channel.awgn(codeWord);
-            std::vector<int> decodedData = coder.decode(noisyCodeWord); // Преобразуем double в int
+            std::vector<int> decodedData = coder.decode(noisyCodeWord);
 
             double errorRate = Utils::calculateErrorRate(data, decodedData);
-            totalErrors += (errorRate > 0); // Если есть ошибки, считаем как одну ошибку
+            totalErrors += (errorRate > 0);
         }
 
         double averageErrorRate = (double)totalErrors / numSimulations_;
         std::cout << "Sigma: " << sigma << ", Average Error Rate: " << averageErrorRate << std::endl;
-        outputFile << sigma << " " << averageErrorRate << std::endl; // Пишем в файл
+        outputFile << sigma << " " << averageErrorRate << std::endl;
     }
 
-    outputFile.close(); // Закрываем файл
+    outputFile.close();
 }
