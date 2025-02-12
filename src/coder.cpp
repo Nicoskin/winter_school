@@ -2,7 +2,6 @@
 #include <iostream>
 
 Coder::Coder(int k) :k_(k) {
-    std::vector<std::vector<int>> G;
     // Copy first k columns from generator_Matrix_A_
     for (size_t i = 0; i < generator_Matrix_A_.size(); i++) {
         std::vector<int> row;
@@ -24,14 +23,14 @@ std::vector<int> Coder::encode(const std::vector<int>& data) {
     // Матричное умножение: codeWord = data * G
     for (int i = 0; i < n_; ++i) {
         for (int j = 0; j < k_; ++j) {
-            codeWord[i] = (codeWord[i] + data[j] * generator_Matrix_A_[j][i]) % 2;  // Умножение по модулю 2
+            codeWord[i] ^= data[j] & G[i][j];  // Умножение по модулю 2
         }
     }
 
     return codeWord;
 }
 
-std::vector<int> Coder::decode(const std::vector<int>& receivedCodeWord) {
+std::vector<int> Coder::decode(const std::vector<double>& receivedCodeWord) {
     if (receivedCodeWord.size() != n_) {
         std::cerr << "Ошибка: Размер принятого кодового слова не соответствует n." << std::endl;
         return {};
@@ -52,15 +51,15 @@ std::vector<int> Coder::decode(const std::vector<int>& receivedCodeWord) {
 
         std::vector<int> possibleCodeWord = encode(possibleData);
 
-        // Вычисляем скалярное произведение
-        int correlation = 0;
+        // Вычисляем Log-Likelihood Ratio (LLR)
+        double llr = 0.0;
         for (size_t j = 0; j < receivedCodeWord.size(); ++j) {
-            correlation += receivedCodeWord[j] * possibleCodeWord[j];
+            llr += (2 * possibleCodeWord[j] - 1) * (2 * receivedCodeWord[j] - 1);
         }
 
-        // Ищем кодовое слово с максимальным скалярным произведением.
-        if (correlation > maxCorrelation) {
-            maxCorrelation = correlation;
+        // Ищем кодовое слово с максимальным LLR
+        if (bestIndex == -1 || llr > maxCorrelation) {
+            maxCorrelation = llr;
             bestIndex = i;
             decodedData = possibleData;
         }

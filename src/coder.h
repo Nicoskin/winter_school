@@ -7,7 +7,7 @@ class Coder {
     public:
     Coder(int k);
     std::vector<int> encode(const std::vector<int>& data);
-    std::vector<int> decode(const std::vector<int>& receivedCodeWord);
+    std::vector<int> decode(const std::vector<double>& receivedCodeWord);
     
     private:
     const int n_ = 20;

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_results(filename="results.txt", k=2):
+def plot_results(filename="results.txt"):
     """
     Читает данные из файла и строит график.
 
@@ -11,20 +11,23 @@ def plot_results(filename="results.txt", k=2):
     try:
         # Чтение данных из файла
         data = np.loadtxt(filename)
-        sigma_values = data[:, 0]  # Первый столбец: sigma
-        error_rates = data[:, 1]   # Второй столбец: error rate
+        
+        k = int(data[0, 0])  # Первая строка: k
+        sigma_values = data[1:, 0]  # Первый столбец: sigma
+        error_rates = data[1:, 1]   # Второй столбец: error rate
 
         # Создание графика
         plt.figure(figsize=(10, 6))  # Размер графика
         plt.plot(sigma_values, error_rates, marker='o', linestyle='-', color='blue')  # Линия и маркеры
 
         # Настройка графика
-        plt.title("Зависимость вероятности ошибки от уровня шума | k={}".format(k))
+        plt.title("Зависимость вероятности ошибки от уровня шума | (20,{})".format(k))
         plt.xlabel("Sigma (СКО шума)")
         plt.ylabel("Вероятность ошибки")
         plt.grid(True)  # Включаем сетку
         plt.xlim(left=0)
-        plt.ylim(bottom=0)
+        plt.ylim(0, 1)
+        #plt.yscale('log')  # Логарифмическая шкала по оси Y
 
         # Отображение графика
         plt.show()
@@ -36,4 +39,4 @@ def plot_results(filename="results.txt", k=2):
 
 
 if __name__ == "__main__":
-    plot_results("build/results.txt", 6)  # Вызов функции для построения графика
+    plot_results("build/results.txt")  # Вызов функции для построения графика

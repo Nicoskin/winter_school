@@ -11,7 +11,7 @@ int k = 2;
 // Coder coder(k);
 // Channel channel(1.0); // Примерное значение СКО
 
-Orchestrator orchestrator(6, 100, 0.0, 5.0, 0.5); // Задаем параметры симуляции
+Orchestrator orchestrator(4, 1000, 0.0, 3.0, 0.1); // Задаем параметры симуляции
 
 orchestrator.runSimulations();
 
